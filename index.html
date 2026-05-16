@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Port Scanner</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #020617, #0f172a, #1e293b);
+            color: white;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1000px;
+            margin: auto;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .hero {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        h1 {
+            color: #38bdf8;
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #cbd5e1;
+            font-size: 18px;
+        }
+
+        form {
+            margin-top: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        input {
+            padding: 14px;
+            width: 230px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            outline: none;
+            font-size: 15px;
+            background: #020617;
+            color: white;
+        }
+
+        input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 10px;
+            background: #38bdf8;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0ea5e9;
+            transform: scale(1.05);
+        }
+
+        .error {
+            color: #f87171;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        h2 {
+            margin-top: 40px;
+            color: #38bdf8;
+        }
+
+        .results-box {
+            margin-top: 30px;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.95);
+            margin: 20px auto;
+            padding: 22px;
+            border-radius: 16px;
+            text-align: left;
+            width: 80%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            border-left: 5px solid #38bdf8;
+        }
+
+        .card h3 {
+            color: #22c55e;
+            margin-top: 0;
+        }
+
+        .card p {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .risk-high {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .risk-medium {
+            color: #facc15;
+            font-weight: bold;
+        }
+
+        .risk-low {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .safe {
+            color: #22c55e;
+            font-size: 22px;
+            margin-top: 30px;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 50px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .card {
+                width: 100%;
+            }
+
+            input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="hero">
+
+            <h1>🔍 Smart Port Scanner</h1>
+
+            <p class="subtitle">
+                Scan open ports, identify services, and get basic security suggestions.
+            </p>
+
+            <form method="POST" action="/">
+
+                <div class="input-group">
+                    <input type="text"
+                           name="target"
+                           placeholder="Enter Target IP e.g. 127.0.0.1"
+                           required>
+
+                    <input type="number"
+                           name="start_port"
+                           placeholder="Start Port e.g. 1"
+                           min="1"
+                           max="65535"
+                           required>
+
+                    <input type="number"
+                           name="end_port"
+                           placeholder="End Port e.g. 5000"
+                           min="1"
+                           max="65535"
+                           required>
+                </div>
+
+                <button type="submit">
+                    🚀 Start Scan
+                </button>
+
+            </form>
+
+            {% if error %}
+                <p class="error">⚠️ {{ error }}</p>
+            {% endif %}
+
+        </div>
+
+        {% if results %}
+
+            <div class="results-box">
+
+                <h2>Scan Results for {{ target }}</h2>
+
+                {% for item in results %}
+
+                    <div class="card">
+
+                        <h3>✅ Port {{ item.port }} OPEN</h3>
+
+                        <p><b>Service:</b> {{ item.service }}</p>
+
+                        <p>
+                            <b>Risk:</b>
+
+                            {% if item.risk == "High" %}
+                                <span class="risk-high">{{ item.risk }}</span>
+                            {% elif item.risk == "Medium" %}
+                                <span class="risk-medium">{{ item.risk }}</span>
+                            {% elif item.risk == "Low" %}
+                                <span class="risk-low">{{ item.risk }}</span>
+                            {% else %}
+                                {{ item.risk }}
+                            {% endif %}
+                        </p>
+
+                        <p><b>Explanation:</b> {{ item.explanation }}</p>
+
+                        <p><b>Suggestion:</b> {{ item.suggestion }}</p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% elif results is not none %}
+
+            <p class="safe">
+                ✅ No open ports found.
+            </p>
+
+        {% endif %}
+
+        <p class="footer">
+            ⚠️ Use this scanner only on your own systems or networks where you have permission.
+        </p>
+
+    </div>
+
+</body>
+</html>
