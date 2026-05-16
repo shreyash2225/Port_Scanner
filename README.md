@@ -36,7 +36,7 @@ This web-based application scans open TCP ports on a target system and provides:
 # 📂 Project Structure
 
 ```text
-Smart-Port-Scanner/
+Port-Scanner/
 │
 ├── app.py
 ├── scanner.py
@@ -53,7 +53,7 @@ Smart-Port-Scanner/
 ## 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Smart-Port-Scanner.git
+git clone https://github.com/YOUR_USERNAME/Port_Scanner.git
 ```
 
 ---
@@ -61,7 +61,7 @@ git clone https://github.com/YOUR_USERNAME/Smart-Port-Scanner.git
 ## 2️⃣ Navigate Into Project
 
 ```bash
-cd Smart-Port-Scanner
+cd Port_Scanner
 ```
 
 ---
